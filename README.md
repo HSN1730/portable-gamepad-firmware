@@ -164,7 +164,7 @@ To compile it on your own machine, you will need a Zephyr build environment. You
 ```
 ./build.py builds.json > build.sh
 chmod +x build.sh
-docker run --rm -v $(pwd):/workspace/project -w /workspace/project ghcr.io/zephyrproject-rtos/ci:v0.28.6 ./build.sh
+docker run --rm -v $(pwd):/workspace/project -w /workspace/project ghcr.io/zephyrproject-rtos/ci:v0.29.2 ./build.sh
 ```
 
 ## Building for new platforms

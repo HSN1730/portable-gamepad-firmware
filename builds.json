@@ -72,7 +72,7 @@
         "name": "flatbox_rev7-nrf54l15",
         "sdk": "ncs",
         "board": "xiao_nrf54l15/nrf54l15/cpuapp",
-        "artifact_built_name": "merged.hex",
+        "artifact_built_name": "merged_xiao_nrf54l15_nrf54l15_cpuapp.hex",
         "extra_params": {
             "EXTRA_CONF_FILE": [
                 "boards/bt.conf",
@@ -88,7 +88,7 @@
         "name": "flatbox_rev7.1-nrf54l15",
         "sdk": "ncs",
         "board": "xiao_nrf54l15/nrf54l15/cpuapp",
-        "artifact_built_name": "merged.hex",
+        "artifact_built_name": "merged_xiao_nrf54l15_nrf54l15_cpuapp.hex",
         "extra_params": {
             "EXTRA_CONF_FILE": [
                 "boards/bt.conf",
@@ -119,7 +119,7 @@
         "name": "xiao_nrf54l15",
         "sdk": "ncs",
         "board": "xiao_nrf54l15/nrf54l15/cpuapp",
-        "artifact_built_name": "merged.hex",
+        "artifact_built_name": "merged_xiao_nrf54l15_nrf54l15_cpuapp.hex",
         "extra_params": {
             "EXTRA_CONF_FILE": [
                 "boards/bt.conf"
@@ -134,7 +134,7 @@
         "sdk": "ncs",
         "disabled": true,
         "board": "xiao_nrf54l15/nrf54l15/cpuapp",
-        "artifact_built_name": "merged.hex",
+        "artifact_built_name": "merged_xiao_nrf54l15_nrf54l15_cpuapp.hex",
         "extra_params": {
             "EXTRA_CONF_FILE": [
                 "boards/bt.conf",
@@ -143,7 +143,7 @@
             "EXTRA_DTC_OVERLAY_FILE": [
                 "boards/xiao_mapping.overlay"
             ],
-            "SB_CONF_FILE": [
+            "SB_EXTRA_CONF_FILE": [
                 "sysbuild_boards/enable_mcuboot.conf"
             ],
             "mcuboot_EXTRA_DTC_OVERLAY_FILE": [
@@ -171,7 +171,7 @@
         "name": "holyiot_25008",
         "sdk": "ncs",
         "board": "holyiot_25008/nrf54l15/cpuapp",
-        "artifact_built_name": "merged.hex",
+        "artifact_built_name": "merged_holyiot_25008_nrf54l15_cpuapp.hex",
         "extra_params": {
             "EXTRA_CONF_FILE": [
                 "boards/bt.conf"
@@ -187,7 +187,7 @@
         "sdk": "ncs",
         "disabled": true,
         "board": "holyiot_25008/nrf54l15/cpuapp",
-        "artifact_built_name": "merged.hex",
+        "artifact_built_name": "merged_holyiot_25008_nrf54l15_cpuapp.hex",
         "extra_params": {
             "EXTRA_CONF_FILE": [
                 "boards/bt.conf",
@@ -197,7 +197,7 @@
                 "boards/holyiot_25008_mapping.overlay"
             ],
             "CONFIG_PGF_INPUT_MODE_DYNAMIC": "n",
-            "SB_CONF_FILE": [
+            "SB_EXTRA_CONF_FILE": [
                 "sysbuild_boards/enable_mcuboot.conf"
             ],
             "mcuboot_EXTRA_DTC_OVERLAY_FILE": [
@@ -209,7 +209,7 @@
         "name": "holyiot_25055",
         "sdk": "ncs",
         "board": "holyiot_25055/nrf54l05/cpuapp",
-        "artifact_built_name": "merged.hex",
+        "artifact_built_name": "merged_holyiot_25055_nrf54l05_cpuapp.hex",
         "extra_params": {
             "EXTRA_CONF_FILE": [
                 "boards/bt.conf"
@@ -225,7 +225,7 @@
         "sdk": "ncs",
         "disabled": true,
         "board": "holyiot_25055/nrf54l05/cpuapp",
-        "artifact_built_name": "merged.hex",
+        "artifact_built_name": "merged_holyiot_25055_nrf54l05_cpuapp.hex",
         "extra_params": {
             "EXTRA_CONF_FILE": [
                 "boards/bt.conf",
@@ -235,7 +235,7 @@
                 "boards/holyiot_25055_mapping.overlay"
             ],
             "CONFIG_PGF_INPUT_MODE_DYNAMIC": "n",
-            "SB_CONF_FILE": [
+            "SB_EXTRA_CONF_FILE": [
                 "sysbuild_boards/enable_mcuboot.conf"
             ],
             "mcuboot_EXTRA_DTC_OVERLAY_FILE": [
@@ -247,7 +247,7 @@
         "name": "nrf52dk",
         "sdk": "ncs",
         "board": "nrf52dk/nrf52832",
-        "artifact_built_name": "merged.hex",
+        "artifact_built_name": "merged_nrf52dk_nrf52832.hex",
         "extra_params": {
             "EXTRA_CONF_FILE": [
                 "boards/bt.conf"
@@ -261,7 +261,7 @@
         "name": "nrf54lm20dk",
         "sdk": "ncs",
         "board": "nrf54lm20dk/nrf54lm20a/cpuapp",
-        "artifact_built_name": "merged.hex",
+        "artifact_built_name": "merged_nrf54lm20dk_nrf54lm20a_cpuapp.hex",
         "extra_params": {
             "EXTRA_CONF_FILE": [
                 "boards/bt.conf",
