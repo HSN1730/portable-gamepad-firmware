@@ -564,5 +564,53 @@
                 "boards/xiao_plus_mapping.overlay"
             ]
         }
+    },
+    {
+        "name": "flatbox_rev7.2-nrf52840",
+        "sdk": "ncs",
+        "board": "xiao_ble",
+        "artifact_built_name": "app/zephyr/zephyr.uf2",
+        "extra_params": {
+            "EXTRA_CONF_FILE": [
+                "boards/usb.conf",
+                "boards/bt.conf",
+                "boards/flatbox_rev7.2.conf"
+            ],
+            "EXTRA_DTC_OVERLAY_FILE": [
+                "boards/hid_dev.overlay",
+                "boards/flatbox_rev7.2.overlay"
+            ]
+        }
+    },
+    {
+        "name": "flatbox_rev7.2-nrf54lm20a",
+        "sdk": "ncs",
+        "board": "xiao_nrf54lm20a/nrf54lm20a/cpuapp",
+        "artifact_built_name": "merged_xiao_nrf54lm20a_nrf54lm20a_cpuapp.hex",
+        "extra_params": {
+            "EXTRA_CONF_FILE": [
+                "boards/bt.conf",
+                "boards/flatbox_rev7.2.conf"
+            ],
+            "EXTRA_DTC_OVERLAY_FILE": [
+                "boards/flatbox_rev7.2.overlay"
+            ]
+        }
+    },
+    {
+        "name": "flatbox_rev7.2-esp32s3",
+        "sdk": "zephyr",
+        "board": "xiao_esp32s3/esp32s3/procpu",
+        "artifact_built_name": "zephyr/zephyr.bin",
+        "extra_params": {
+            "EXTRA_CONF_FILE": [
+                "boards/usb.conf",
+                "boards/flatbox_rev7.2.conf"
+            ],
+            "EXTRA_DTC_OVERLAY_FILE": [
+                "boards/hid_dev.overlay",
+                "boards/flatbox_rev7.2.overlay"
+            ]
+        }
     }
 ]
