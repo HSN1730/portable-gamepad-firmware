@@ -36,23 +36,21 @@
 #ifdef CONFIG_BT_RADIO_NOTIFICATION_CONN_CB
 #include <bluetooth/radio_notification_cb.h>
 #endif
-#include <bluetooth/services/hids.h>
 #include <zephyr/bluetooth/services/bas.h>
 #include <zephyr/bluetooth/services/dis.h>
+
+#include "hids.h"
 #endif
 
 #include "bootloader.h"
+#include "chk.h"
 
 LOG_MODULE_REGISTER(pgf, LOG_LEVEL_DBG);
 
 static const struct gpio_dt_spec sys_button = GPIO_DT_SPEC_GET(DT_ALIAS(sys_button), gpios);
 
-#define CHK(X) ({ int err = X; if (err != 0) { LOG_ERR("%s returned %d (%s:%d)", #X, err, __FILE__, __LINE__); } err == 0; })
-
 #define PM_DEVICE_RUNTIME_GET(node_id, prop, idx) CHK(pm_device_runtime_get(DEVICE_DT_GET(DT_PHANDLE_BY_IDX(node_id, prop, idx))));
 #define PM_DEVICE_RUNTIME_PUT(node_id, prop, idx) CHK(pm_device_runtime_put(DEVICE_DT_GET(DT_PHANDLE_BY_IDX(node_id, prop, idx))));
-
-#define REPORT_ID_IDX 0
 
 #define DISCONNECTED_SLEEP_TIMEOUT K_SECONDS(60)
 #define CONNECTED_SLEEP_TIMEOUT K_SECONDS(600)
@@ -334,6 +332,8 @@ static uint8_t prev_wired_report[MAX_REPORT_SIZE];
 #endif
 
 #ifdef CONFIG_BT
+BUILD_ASSERT(MAX_REPORT_SIZE <= PGF_MAX_BT_REPORT_SIZE, "MAX_REPORT_SIZE doesn't fit in PGF_MAX_BT_REPORT_SIZE");
+
 static uint8_t bluetooth_report[MAX_REPORT_SIZE];
 static uint8_t prev_bluetooth_report[MAX_REPORT_SIZE];
 #endif
@@ -433,8 +433,6 @@ static inline void reset_conn_state() {
     conn_state.desired_subrate_factor = 1;
 #endif
 }
-
-BT_HIDS_DEF(hids_obj, MAX_REPORT_SIZE);
 
 static K_SEM_DEFINE(bt_event_sem, 0, 1);
 
@@ -652,7 +650,7 @@ static void connected(struct bt_conn* conn, uint8_t err) {
         }
     }
 
-    CHK(bt_hids_connected(&hids_obj, conn));
+    CHK(hids_connected(conn));
 
     set_led_mode(LED_CONNECTED);
     k_work_reschedule(&sleep_work, CONNECTED_SLEEP_TIMEOUT);
@@ -683,7 +681,7 @@ static void disconnected(struct bt_conn* conn, uint8_t reason) {
 #ifdef CONFIG_BT_SHORTER_CONNECTION_INTERVALS
         k_work_cancel_delayable(&idle_work);
 #endif
-        CHK(bt_hids_disconnected(&hids_obj, conn_to_unref));
+        CHK(hids_disconnected(conn_to_unref));
         bt_conn_unref(conn_to_unref);
     } else {
         LOG_ERR("Disconnected from a different connection than the active one?");
@@ -1071,30 +1069,6 @@ static void set_bt_name() {
     LOG_INF("%s", bt_name);
 
     bt_set_name(bt_name);
-}
-
-static void hid_init(void) {
-    struct bt_hids_init_param hids_init_param = { 0 };
-    struct bt_hids_inp_rep* hids_inp_rep;
-
-    hids_init_param.rep_map.data = bluetooth_report_map;
-    hids_init_param.rep_map.size = bluetooth_report_map_length;
-
-    hids_init_param.info.bcd_hid = 0x0101;
-    hids_init_param.info.b_country_code = 0x00;
-    hids_init_param.info.flags = (BT_HIDS_REMOTE_WAKE |
-                                  BT_HIDS_NORMALLY_CONNECTABLE);
-
-    hids_inp_rep = &hids_init_param.inp_rep_group_init.reports[0];
-    hids_inp_rep->size = bluetooth_report_size;
-    hids_inp_rep->id = bluetooth_report_id;
-    hids_init_param.inp_rep_group_init.cnt++;
-
-    CHK(bt_hids_init(&hids_obj, &hids_init_param));
-}
-
-static void report_sent_cb(struct bt_conn* conn, void* user_data) {
-    LOG_DBG("");
 }
 
 #ifdef CONFIG_BT_RADIO_NOTIFICATION_CONN_CB
@@ -2064,7 +2038,7 @@ int main() {
         return 0;
     }
 
-    hid_init();
+    hids_init(bluetooth_report_map, bluetooth_report_map_length, bluetooth_report_id, bluetooth_report_size);
 #endif
 
 #ifdef CONFIG_USBD_HID_SUPPORT
@@ -2143,7 +2117,7 @@ int main() {
                 struct bt_conn* conn = get_active_conn();
                 if (conn != NULL) {
                     LOG_DBG("Sending report...");
-                    if (CHK(bt_hids_inp_rep_send(&hids_obj, conn, REPORT_ID_IDX, bluetooth_report, bluetooth_report_size, report_sent_cb))) {
+                    if (CHK(hids_send_report(conn, bluetooth_report, bluetooth_report_size))) {
                         memcpy(prev_bluetooth_report, bluetooth_report, bluetooth_report_size);
                     }
 #ifdef CONFIG_BT_SHORTER_CONNECTION_INTERVALS

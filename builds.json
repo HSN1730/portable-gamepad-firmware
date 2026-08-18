@@ -7,6 +7,7 @@
         "extra_params": {
             "EXTRA_CONF_FILE": [
                 "boards/bt.conf",
+                "boards/bt_ncs.conf",
                 "boards/usb.conf"
             ],
             "EXTRA_DTC_OVERLAY_FILE": [
@@ -24,6 +25,7 @@
             "EXTRA_CONF_FILE": [
                 "boards/slimbox_bt.conf",
                 "boards/bt.conf",
+                "boards/bt_ncs.conf",
                 "boards/usb.conf"
             ],
             "EXTRA_DTC_OVERLAY_FILE": [
@@ -40,6 +42,7 @@
         "extra_params": {
             "EXTRA_CONF_FILE": [
                 "boards/bt.conf",
+                "boards/bt_ncs.conf",
                 "boards/flatbox_rev7.conf",
                 "boards/usb.conf"
             ],
@@ -58,6 +61,7 @@
         "extra_params": {
             "EXTRA_CONF_FILE": [
                 "boards/bt.conf",
+                "boards/bt_ncs.conf",
                 "boards/flatbox_rev7.1.conf",
                 "boards/usb.conf"
             ],
@@ -76,6 +80,7 @@
         "extra_params": {
             "EXTRA_CONF_FILE": [
                 "boards/bt.conf",
+                "boards/bt_ncs.conf",
                 "boards/flatbox_rev7.conf"
             ],
             "EXTRA_DTC_OVERLAY_FILE": [
@@ -92,6 +97,7 @@
         "extra_params": {
             "EXTRA_CONF_FILE": [
                 "boards/bt.conf",
+                "boards/bt_ncs.conf",
                 "boards/flatbox_rev7.1.conf"
             ],
             "EXTRA_DTC_OVERLAY_FILE": [
@@ -107,6 +113,7 @@
         "extra_params": {
             "EXTRA_CONF_FILE": [
                 "boards/bt.conf",
+                "boards/bt_ncs.conf",
                 "boards/usb.conf"
             ],
             "EXTRA_DTC_OVERLAY_FILE": [
@@ -122,7 +129,8 @@
         "artifact_built_name": "merged_xiao_nrf54l15_nrf54l15_cpuapp.hex",
         "extra_params": {
             "EXTRA_CONF_FILE": [
-                "boards/bt.conf"
+                "boards/bt.conf",
+                "boards/bt_ncs.conf"
             ],
             "EXTRA_DTC_OVERLAY_FILE": [
                 "boards/xiao_mapping.overlay"
@@ -138,6 +146,7 @@
         "extra_params": {
             "EXTRA_CONF_FILE": [
                 "boards/bt.conf",
+                "boards/bt_ncs.conf",
                 "boards/ota_dfu.conf"
             ],
             "EXTRA_DTC_OVERLAY_FILE": [
@@ -159,6 +168,7 @@
         "extra_params": {
             "EXTRA_CONF_FILE": [
                 "boards/bt.conf",
+                "boards/bt_ncs.conf",
                 "boards/usb.conf"
             ],
             "EXTRA_DTC_OVERLAY_FILE": [
@@ -174,7 +184,8 @@
         "artifact_built_name": "merged_holyiot_25008_nrf54l15_cpuapp.hex",
         "extra_params": {
             "EXTRA_CONF_FILE": [
-                "boards/bt.conf"
+                "boards/bt.conf",
+                "boards/bt_ncs.conf"
             ],
             "EXTRA_DTC_OVERLAY_FILE": [
                 "boards/holyiot_25008_mapping.overlay"
@@ -191,6 +202,7 @@
         "extra_params": {
             "EXTRA_CONF_FILE": [
                 "boards/bt.conf",
+                "boards/bt_ncs.conf",
                 "boards/ota_dfu.conf"
             ],
             "EXTRA_DTC_OVERLAY_FILE": [
@@ -212,7 +224,8 @@
         "artifact_built_name": "merged_holyiot_25055_nrf54l05_cpuapp.hex",
         "extra_params": {
             "EXTRA_CONF_FILE": [
-                "boards/bt.conf"
+                "boards/bt.conf",
+                "boards/bt_ncs.conf"
             ],
             "EXTRA_DTC_OVERLAY_FILE": [
                 "boards/holyiot_25055_mapping.overlay"
@@ -229,6 +242,7 @@
         "extra_params": {
             "EXTRA_CONF_FILE": [
                 "boards/bt.conf",
+                "boards/bt_ncs.conf",
                 "boards/ota_dfu.conf"
             ],
             "EXTRA_DTC_OVERLAY_FILE": [
@@ -250,7 +264,8 @@
         "artifact_built_name": "merged_nrf52dk_nrf52832.hex",
         "extra_params": {
             "EXTRA_CONF_FILE": [
-                "boards/bt.conf"
+                "boards/bt.conf",
+                "boards/bt_ncs.conf"
             ],
             "EXTRA_DTC_OVERLAY_FILE": [
                 "boards/nrf52dk_mapping.overlay"
@@ -265,6 +280,7 @@
         "extra_params": {
             "EXTRA_CONF_FILE": [
                 "boards/bt.conf",
+                "boards/bt_ncs.conf",
                 "boards/usb.conf"
             ],
             "EXTRA_DTC_OVERLAY_FILE": [
@@ -558,7 +574,8 @@
         "artifact_built_name": "merged_xiao_nrf54lm20a_nrf54lm20a_cpuapp.hex",
         "extra_params": {
             "EXTRA_CONF_FILE": [
-                "boards/bt.conf"
+                "boards/bt.conf",
+                "boards/bt_ncs.conf"
             ],
             "EXTRA_DTC_OVERLAY_FILE": [
                 "boards/xiao_plus_mapping.overlay"
@@ -574,6 +591,7 @@
             "EXTRA_CONF_FILE": [
                 "boards/usb.conf",
                 "boards/bt.conf",
+                "boards/bt_ncs.conf",
                 "boards/flatbox_rev7.2.conf"
             ],
             "EXTRA_DTC_OVERLAY_FILE": [
@@ -590,6 +608,7 @@
         "extra_params": {
             "EXTRA_CONF_FILE": [
                 "boards/bt.conf",
+                "boards/bt_ncs.conf",
                 "boards/flatbox_rev7.2.conf"
             ],
             "EXTRA_DTC_OVERLAY_FILE": [

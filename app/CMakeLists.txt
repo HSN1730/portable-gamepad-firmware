@@ -11,6 +11,12 @@ if ("${CONFIG_BUILD_OUTPUT_UF2_FAMILY_ID}" STREQUAL "0xada52840")
     target_sources(app PRIVATE src/bootloader_nrf52840.c)
 endif()
 
+if (CONFIG_BT_HIDS)
+    target_sources(app PRIVATE src/hids_ncs.c)
+elseif (CONFIG_BT)
+    target_sources(app PRIVATE src/hids_zephyr.c)
+endif()
+
 if (CONFIG_SOC_SERIES_RP2040 OR CONFIG_SOC_SERIES_RP2350)
     target_sources(app PRIVATE src/bootloader_rp2040.c)
 endif()
