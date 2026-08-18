@@ -33,7 +33,9 @@
 #include <zephyr/bluetooth/hci.h>
 #include <zephyr/bluetooth/uuid.h>
 
+#ifdef CONFIG_BT_RADIO_NOTIFICATION_CONN_CB
 #include <bluetooth/radio_notification_cb.h>
+#endif
 #include <bluetooth/services/hids.h>
 #include <zephyr/bluetooth/services/bas.h>
 #include <zephyr/bluetooth/services/dis.h>
@@ -61,7 +63,13 @@ static const struct gpio_dt_spec sys_button = GPIO_DT_SPEC_GET(DT_ALIAS(sys_butt
 #ifdef CONFIG_BT
 
 #define SUPERVISION_TIMEOUT_10MS 100
+
+#ifdef CONFIG_BT_RADIO_NOTIFICATION_CONN_CB
 #define RADIO_NOTIFICATION_DISTANCE_US DT_PROP_OR(DT_PATH(zephyr_user), radio_notification_distance_us, 500)
+#define BT_EVENT_SEM_TIMEOUT K_USEC(10000)
+#else
+#define BT_EVENT_SEM_TIMEOUT K_USEC(1000)
+#endif
 
 #ifdef CONFIG_BT_SHORTER_CONNECTION_INTERVALS
 #define CONNECTION_INTERVAL_MIN_US DT_PROP_OR(DT_PATH(zephyr_user), connection_interval_min_us, 1000)
@@ -1089,6 +1097,7 @@ static void report_sent_cb(struct bt_conn* conn, void* user_data) {
     LOG_DBG("");
 }
 
+#ifdef CONFIG_BT_RADIO_NOTIFICATION_CONN_CB
 static void radio_notification_conn_cb(struct bt_conn* conn) {
     k_sem_give(&bt_event_sem);
 }
@@ -1096,6 +1105,7 @@ static void radio_notification_conn_cb(struct bt_conn* conn) {
 static const struct bt_radio_notification_conn_cb radio_notification_callbacks = {
     .prepare = radio_notification_conn_cb,
 };
+#endif
 
 #endif  // CONFIG_BT
 
@@ -2071,7 +2081,9 @@ int main() {
         return 0;
     }
 
+#ifdef CONFIG_BT_RADIO_NOTIFICATION_CONN_CB
     CHK(bt_radio_notification_conn_cb_register(&radio_notification_callbacks, RADIO_NOTIFICATION_DISTANCE_US));
+#endif
 
     settings_load();
     set_bt_name();
@@ -2085,7 +2097,7 @@ int main() {
 #endif
 #ifdef CONFIG_BT
         if (!usb_ready) {
-            k_sem_take(&bt_event_sem, K_USEC(10000));
+            k_sem_take(&bt_event_sem, BT_EVENT_SEM_TIMEOUT);
         }
 #endif
         handle_buttons();
