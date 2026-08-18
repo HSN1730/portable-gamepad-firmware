@@ -477,12 +477,16 @@
     },
     {
         "name": "xiao_esp32s3",
-        "sdk": "zephyr",
+        "sdk": "zephyr-prerelease",
+        "extra_setup": [
+            "west blobs fetch hal_espressif"
+        ],
         "board": "xiao_esp32s3/esp32s3/procpu",
         "artifact_built_name": "zephyr/zephyr.bin",
         "extra_params": {
             "EXTRA_CONF_FILE": [
-                "boards/usb.conf"
+                "boards/usb.conf",
+                "boards/bt.conf"
             ],
             "EXTRA_DTC_OVERLAY_FILE": [
                 "boards/hid_dev.overlay",
@@ -492,13 +496,17 @@
     },
     {
         "name": "flatbox_rev7-esp32s3",
-        "sdk": "zephyr",
+        "sdk": "zephyr-prerelease",
+        "extra_setup": [
+            "west blobs fetch hal_espressif"
+        ],
         "board": "xiao_esp32s3/esp32s3/procpu",
         "artifact_built_name": "zephyr/zephyr.bin",
         "extra_params": {
             "EXTRA_CONF_FILE": [
                 "boards/flatbox_rev7.conf",
-                "boards/usb.conf"
+                "boards/usb.conf",
+                "boards/bt.conf"
             ],
             "EXTRA_DTC_OVERLAY_FILE": [
                 "boards/flatbox_rev7.overlay",
@@ -508,13 +516,17 @@
     },
     {
         "name": "flatbox_rev7.1-esp32s3",
-        "sdk": "zephyr",
+        "sdk": "zephyr-prerelease",
+        "extra_setup": [
+            "west blobs fetch hal_espressif"
+        ],
         "board": "xiao_esp32s3/esp32s3/procpu",
         "artifact_built_name": "zephyr/zephyr.bin",
         "extra_params": {
             "EXTRA_CONF_FILE": [
                 "boards/flatbox_rev7.1.conf",
-                "boards/usb.conf"
+                "boards/usb.conf",
+                "boards/bt.conf"
             ],
             "EXTRA_DTC_OVERLAY_FILE": [
                 "boards/flatbox_rev7.1.overlay",
@@ -618,12 +630,16 @@
     },
     {
         "name": "flatbox_rev7.2-esp32s3",
-        "sdk": "zephyr",
+        "sdk": "zephyr-prerelease",
+        "extra_setup": [
+            "west blobs fetch hal_espressif"
+        ],
         "board": "xiao_esp32s3/esp32s3/procpu",
         "artifact_built_name": "zephyr/zephyr.bin",
         "extra_params": {
             "EXTRA_CONF_FILE": [
                 "boards/usb.conf",
+                "boards/bt.conf",
                 "boards/flatbox_rev7.2.conf"
             ],
             "EXTRA_DTC_OVERLAY_FILE": [
