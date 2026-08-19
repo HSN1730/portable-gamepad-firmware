@@ -550,5 +550,19 @@
                 "boards/teensy40_mapping.overlay"
             ]
         }
+    },
+    {
+        "name": "xiao_nrf54lm20a",
+        "sdk": "ncs",
+        "board": "xiao_nrf54lm20a/nrf54lm20a/cpuapp",
+        "artifact_built_name": "merged_xiao_nrf54lm20a_nrf54lm20a_cpuapp.hex",
+        "extra_params": {
+            "EXTRA_CONF_FILE": [
+                "boards/bt.conf"
+            ],
+            "EXTRA_DTC_OVERLAY_FILE": [
+                "boards/xiao_plus_mapping.overlay"
+            ]
+        }
     }
 ]
