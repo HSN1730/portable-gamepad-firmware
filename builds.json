@@ -111,7 +111,7 @@
             ],
             "EXTRA_DTC_OVERLAY_FILE": [
                 "boards/hid_dev.overlay",
-                "boards/xiao_mapping.overlay"
+                "boards/xiao_plus_mapping.overlay"
             ]
         }
     },
@@ -470,7 +470,7 @@
             ],
             "EXTRA_DTC_OVERLAY_FILE": [
                 "boards/hid_dev.overlay",
-                "boards/xiao_mapping.overlay"
+                "boards/xiao_plus_mapping.overlay"
             ]
         }
     },
