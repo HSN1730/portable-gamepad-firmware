@@ -2181,7 +2181,8 @@ int main() {
     }
     release_conn(conn);
 
-    CHK(bt_disable());
+    // This crashes on ESP32-C6 so leave it disabled for now.
+    // CHK(bt_disable());
 #endif
 
 #if DT_NODE_HAS_PROP(DT_PATH(zephyr_user), keep_awake_devices) && defined(CONFIG_PM_DEVICE_RUNTIME)
