@@ -664,5 +664,22 @@
                 "boards/xiao_mapping.overlay"
             ]
         }
+    },
+    {
+        "name": "xiao_esp32c3",
+        "sdk": "zephyr-prerelease",
+        "extra_setup": [
+            "west blobs fetch hal_espressif"
+        ],
+        "board": "xiao_esp32c3",
+        "artifact_built_name": "zephyr/zephyr.bin",
+        "extra_params": {
+            "EXTRA_CONF_FILE": [
+                "boards/bt.conf"
+            ],
+            "EXTRA_DTC_OVERLAY_FILE": [
+                "boards/xiao_mapping.overlay"
+            ]
+        }
     }
 ]
