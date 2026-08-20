@@ -28,9 +28,13 @@ def main():
             parser.error(f"no builds using SDK {args.sdk!r}")
 
     sdks = set()
+    extra_setup_by_sdk = {}
 
     for b in builds:
         sdks.add(b["sdk"])
+        for extra_setup in b.get("extra_setup", []):
+            if extra_setup not in extra_setup_by_sdk.setdefault(b["sdk"], []):
+                extra_setup_by_sdk[b["sdk"]].append(extra_setup)
 
     print(
         """#!/bin/bash
@@ -64,6 +68,12 @@ west init -l "${{SDK_PATH_PREFIX}}"/{sdk}/manifest
 ZEPHYR_BASE=`realpath "${{SDK_PATH_PREFIX}}"/{sdk}/zephyr` west update -o=--depth=1 -n
 """
             )
+            for extra_setup in extra_setup_by_sdk.get(sdk, []):
+                print(
+                    f'ZEPHYR_BASE=`realpath "${{SDK_PATH_PREFIX}}"/{sdk}/zephyr` {extra_setup}'
+                )
+            if extra_setup_by_sdk.get(sdk):
+                print()
 
     for b in builds:
         prefix = "#" if b.get("disabled", False) and not args.name else ""
