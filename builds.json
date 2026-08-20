@@ -647,5 +647,22 @@
                 "boards/flatbox_rev7.2.overlay"
             ]
         }
+    },
+    {
+        "name": "xiao_mg24",
+        "sdk": "zephyr",
+        "extra_setup": [
+            "west blobs fetch hal_silabs"
+        ],
+        "board": "xiao_mg24",
+        "artifact_built_name": "zephyr/zephyr.hex",
+        "extra_params": {
+            "EXTRA_CONF_FILE": [
+                "boards/bt.conf"
+            ],
+            "EXTRA_DTC_OVERLAY_FILE": [
+                "boards/xiao_mapping.overlay"
+            ]
+        }
     }
 ]
