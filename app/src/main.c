@@ -20,6 +20,7 @@
 #include <zephyr/sys/poweroff.h>
 #include <zephyr/sys/printk.h>
 #include <zephyr/types.h>
+#include <zephyr/version.h>
 
 #ifdef CONFIG_USBD_HID_SUPPORT
 #include <zephyr/usb/class/usbd_hid.h>
@@ -1611,6 +1612,10 @@ static int xusb_request(struct usbd_class_data* const c_data, struct net_buf* bu
     return 0;
 }
 
+// Zephyr changed the usbd_class_api control_to_host/control_to_dev signatures
+// (and dropped errno-based error reporting) in v4.5.0.
+#if KERNEL_VERSION_NUMBER < ZEPHYR_VERSION(4, 4, 99)
+
 static int xusb_control_to_host(struct usbd_class_data* const c_data, const struct usb_setup_packet* setup, struct net_buf* buf) {
     LOG_INF("");
     uint16_t wValue = sys_le16_to_cpu(setup->wValue);
@@ -1635,6 +1640,37 @@ static int xusb_control_to_dev(struct usbd_class_data* const c_data, const struc
     errno = -ENOTSUP;
     return 0;
 }
+
+#else  // KERNEL_VERSION_NUMBER >= ZEPHYR_VERSION(4, 4, 99)
+
+static struct net_buf* xusb_control_to_host(struct usbd_class_data* const c_data, const struct usb_setup_packet* const setup) {
+    LOG_INF("");
+    uint16_t wValue = sys_le16_to_cpu(setup->wValue);
+    uint16_t wLength = sys_le16_to_cpu(setup->wLength);
+
+    if (setup->bRequest == USB_SREQ_GET_DESCRIPTOR) {
+        uint8_t desc_type = wValue >> 8;
+
+        if (desc_type == XUSB_PROPRIETARY_DESCRIPTOR_TYPE) {
+            size_t len = MIN(wLength, sizeof(xusb_desc_proprietary));
+            struct net_buf* buf = usbd_ep_ctrl_data_in_alloc(usbd_class_get_ctx(c_data), len);
+            if (buf == NULL) {
+                return NULL;
+            }
+            net_buf_add_mem(buf, &xusb_desc_proprietary, len);
+            return buf;
+        }
+    }
+
+    return NULL;
+}
+
+static int xusb_control_to_dev(struct usbd_class_data* const c_data, const struct usb_setup_packet* const setup, const struct net_buf* const buf) {
+    LOG_INF("");
+    return -ENOTSUP;
+}
+
+#endif  // KERNEL_VERSION_NUMBER < ZEPHYR_VERSION(4, 4, 99)
 
 static void xusb_enable(struct usbd_class_data* const c_data) {
     set_usb_ready(true);
