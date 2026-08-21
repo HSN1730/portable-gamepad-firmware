@@ -1804,7 +1804,7 @@ static void configure_buttons(void) {
 
     // sys_button is probably one of the gamepad buttons we just configured,
     // but configure it anyway in case it's not.
-    CHK(gpio_pin_configure_dt(&sys_button, GPIO_INPUT | GPIO_PULL_UP | GPIO_ACTIVE_LOW));
+    CHK(gpio_pin_configure_dt(&sys_button, GPIO_INPUT | GPIO_PULL_UP | GPIO_ACTIVE_LOW | GPIO_INT_WAKEUP));
 }
 
 #define BUTTON_GET(name)                                                                                        \
