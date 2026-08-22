@@ -17,7 +17,6 @@
 #include <zephyr/settings/settings.h>
 #include <zephyr/sys/byteorder.h>
 #include <zephyr/sys/hash_function.h>
-#include <zephyr/sys/poweroff.h>
 #include <zephyr/sys/printk.h>
 #include <zephyr/types.h>
 #include <zephyr/version.h>
@@ -45,6 +44,7 @@
 
 #include "bootloader.h"
 #include "chk.h"
+#include "sleep.h"
 
 LOG_MODULE_REGISTER(pgf, LOG_LEVEL_DBG);
 
@@ -2192,11 +2192,11 @@ int main() {
     k_sleep(K_MSEC(100));
 
     set_status_led(false);
-    CHK(gpio_pin_interrupt_configure_dt(&sys_button, GPIO_INT_LEVEL_ACTIVE));
 
     LOG_INF("Going to sleep...");
     LOG_PANIC();
-#ifdef CONFIG_POWEROFF
-    sys_poweroff();
-#endif
+
+    enter_sleep(&sys_button);
+
+    LOG_INF("You shouldn't be seeing this.");
 }

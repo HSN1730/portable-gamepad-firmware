@@ -17,6 +17,12 @@ elseif (CONFIG_BT)
     target_sources(app PRIVATE src/hids_zephyr.c)
 endif()
 
+if (CONFIG_SOC_FAMILY_SILABS_S2)
+    target_sources(app PRIVATE src/sleep_silabs.c)
+else()
+    target_sources(app PRIVATE src/sleep_default.c)
+endif()
+
 if (CONFIG_SOC_SERIES_RP2040 OR CONFIG_SOC_SERIES_RP2350)
     target_sources(app PRIVATE src/bootloader_rp2040.c)
 endif()
