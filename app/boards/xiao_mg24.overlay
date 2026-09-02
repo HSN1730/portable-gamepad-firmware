@@ -3,3 +3,5 @@
         status-led = &led0;
     };
 };
+
+xiao_adc: &adc0 {};

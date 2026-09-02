@@ -1,1 +1,49 @@
 #include "rp2040_storage_partition.dtsi"
+
+&adc {
+    #address-cells = <1>;
+    #size-cells = <0>;
+
+    channel@0 {
+        reg = <0>; /* A0, GPIO26 */
+        zephyr,gain = "ADC_GAIN_1";
+        zephyr,reference = "ADC_REF_INTERNAL";
+        zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+        zephyr,resolution = <12>;
+    };
+
+    channel@1 {
+        reg = <1>; /* A1, GPIO27 */
+        zephyr,gain = "ADC_GAIN_1";
+        zephyr,reference = "ADC_REF_INTERNAL";
+        zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+        zephyr,resolution = <12>;
+    };
+
+    channel@2 {
+        reg = <2>; /* A2, GPIO28 */
+        zephyr,gain = "ADC_GAIN_1";
+        zephyr,reference = "ADC_REF_INTERNAL";
+        zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+        zephyr,resolution = <12>;
+    };
+
+    channel@3 {
+        reg = <3>; /* A3, GPIO29 */
+        zephyr,gain = "ADC_GAIN_1";
+        zephyr,reference = "ADC_REF_INTERNAL";
+        zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+        zephyr,resolution = <12>;
+    };
+};
+
+/ {
+    feather_adc: io-channel-nexus {
+        compatible = "io-channel-nexus";
+        #io-channel-cells = <1>;
+        io-channel-map = <0 &adc 0>,  /* A0 */
+                          <1 &adc 1>,  /* A1 */
+                          <2 &adc 2>,  /* A2 */
+                          <3 &adc 3>;  /* A3 */
+    };
+};

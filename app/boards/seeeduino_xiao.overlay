@@ -1,0 +1,57 @@
+&pinctrl {
+    adc_custom_pins: adc_custom_pins {
+        group1 {
+            /* D0, D1, D2, D3 */
+            pinmux = <PA2B_ADC_AIN0>, <PA4B_ADC_AIN4>, <PA10B_ADC_AIN18>, <PA11B_ADC_AIN19>;
+        };
+    };
+};
+
+xiao_adc: &adc {
+    pinctrl-0 = <&adc_custom_pins>;
+    pinctrl-names = "default";
+
+    status = "okay";
+    #address-cells = <1>;
+    #size-cells = <0>;
+
+    channel@0 {
+        reg = <0>; /* D0, PA02 */
+        zephyr,input-positive = <0>; /* AIN0 */
+        zephyr,gain = "ADC_GAIN_1_2";
+        zephyr,reference = "ADC_REF_VDD_1_2";
+        zephyr,vref-mv = <1650>; /* VDDANA/2, VDDANA assumed 3.3V */
+        zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+        zephyr,resolution = <12>;
+    };
+
+    channel@1 {
+        reg = <1>; /* D1, PA04 */
+        zephyr,input-positive = <4>; /* AIN4 */
+        zephyr,gain = "ADC_GAIN_1_2";
+        zephyr,reference = "ADC_REF_VDD_1_2";
+        zephyr,vref-mv = <1650>; /* VDDANA/2, VDDANA assumed 3.3V */
+        zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+        zephyr,resolution = <12>;
+    };
+
+    channel@2 {
+        reg = <2>; /* D2, PA10 */
+        zephyr,input-positive = <18>; /* AIN18 */
+        zephyr,gain = "ADC_GAIN_1_2";
+        zephyr,reference = "ADC_REF_VDD_1_2";
+        zephyr,vref-mv = <1650>; /* VDDANA/2, VDDANA assumed 3.3V */
+        zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+        zephyr,resolution = <12>;
+    };
+
+    channel@3 {
+        reg = <3>; /* D3, PA11 */
+        zephyr,input-positive = <19>; /* AIN19 */
+        zephyr,gain = "ADC_GAIN_1_2";
+        zephyr,reference = "ADC_REF_VDD_1_2";
+        zephyr,vref-mv = <1650>; /* VDDANA/2, VDDANA assumed 3.3V */
+        zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+        zephyr,resolution = <12>;
+    };
+};

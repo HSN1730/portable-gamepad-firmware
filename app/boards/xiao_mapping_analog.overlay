@@ -1,0 +1,36 @@
+/ {
+    gamepad-buttons {
+        compatible = "gpio-keys";
+        start { gpios = <&xiao_d 4 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+        select { gpios = <&xiao_d 5 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+        home { gpios = <&xiao_d 6 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+        south { gpios = <&xiao_d 7 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+        east { gpios = <&xiao_d 8 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+        west { gpios = <&xiao_d 9 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+        north { gpios = <&xiao_d 10 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+    };
+
+    gamepad-axes {
+        compatible = "gamepad-axes";
+        io-channels = <&xiao_adc 0>, <&xiao_adc 1>, <&xiao_adc 2>, <&xiao_adc 3>;
+        io-channel-names = "left-stick-x", "left-stick-y", "right-stick-x", "right-stick-y";
+
+        // full range is 0-65535
+        left-stick-x-center = <32768>;
+        left-stick-y-center = <32768>;
+        left-stick-inner-radius = <2048>;
+        left-stick-outer-radius = <30720>;
+        right-stick-x-center = <32768>;
+        right-stick-y-center = <32768>;
+        right-stick-inner-radius = <2048>;
+        right-stick-outer-radius = <30720>;
+        left-trigger-lower-end = <4096>;
+        left-trigger-upper-end = <61440>;
+        right-trigger-lower-end = <4096>;
+        right-trigger-upper-end = <61440>;
+    };
+
+    aliases {
+        sys-button = "/gamepad-buttons/start";
+    };
+};

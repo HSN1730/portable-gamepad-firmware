@@ -42,6 +42,7 @@
 #include "hids.h"
 #endif
 
+#include "analog_axes.h"
 #include "battery.h"
 #include "bootloader.h"
 #include "chk.h"
@@ -297,10 +298,10 @@ struct __attribute__((packed)) report_xusb_t {
 BUILD_ASSERT(sizeof(struct report_xusb_t) == 20, "wrong XUSB report size");
 
 struct __attribute__((packed)) report_xbox_t {
-    int16_t lx;
-    int16_t ly;
-    int16_t rx;
-    int16_t ry;
+    uint16_t lx;
+    uint16_t ly;
+    uint16_t rx;
+    uint16_t ry;
     uint16_t lt;
     uint16_t rt;
     uint8_t dpad;
@@ -1877,10 +1878,46 @@ static void fill_out_report(uint8_t* report, bool wired) {
             report_->l1 = BUTTON_GET(l1);
             report_->a = BUTTON_GET(south);
             report_->b = BUTTON_GET(east);
-            report_->r2 = BUTTON_GET(r2);
-            report_->r2_axis = report_->r2 * 255;
+
+            // stick output range is 1..255
+#if HAVE_ANALOG_AXIS(left_stick_x)
+            report_->lx = *analog_axes[ANALOG_AXIS_LX] >> 8;
+            if (report_->lx == 0) {
+                report_->lx = 1;
+            }
+#endif
+#if HAVE_ANALOG_AXIS(left_stick_y)
+            report_->ly = *analog_axes[ANALOG_AXIS_LY] >> 8;
+            if (report_->ly == 0) {
+                report_->ly = 1;
+            }
+#endif
+#if HAVE_ANALOG_AXIS(right_stick_x)
+            report_->rx = *analog_axes[ANALOG_AXIS_RX] >> 8;
+            if (report_->rx == 0) {
+                report_->rx = 1;
+            }
+#endif
+#if HAVE_ANALOG_AXIS(right_stick_y)
+            report_->ry = *analog_axes[ANALOG_AXIS_RY] >> 8;
+            if (report_->ry == 0) {
+                report_->ry = 1;
+            }
+#endif
+#if HAVE_ANALOG_AXIS(left_trigger)
+            report_->l2_axis = *analog_axes[ANALOG_AXIS_LT] >> 8;
+            report_->l2 = report_->l2_axis > 64;
+#else
             report_->l2 = BUTTON_GET(l2);
             report_->l2_axis = report_->l2 * 255;
+#endif
+#if HAVE_ANALOG_AXIS(right_trigger)
+            report_->r2_axis = *analog_axes[ANALOG_AXIS_RT] >> 8;
+            report_->r2 = report_->r2_axis > 64;
+#else
+            report_->r2 = BUTTON_GET(r2);
+            report_->r2_axis = report_->r2 * 255;
+#endif
 
             int dpad = BUTTON_GET(dpad_left) | (BUTTON_GET(dpad_right) << 1) | (BUTTON_GET(dpad_up) << 2) | (BUTTON_GET(dpad_down) << 3);
 
@@ -1901,10 +1938,32 @@ static void fill_out_report(uint8_t* report, bool wired) {
             report_->capture = BUTTON_GET(button14);
             report_->l = BUTTON_GET(l1);
             report_->r = BUTTON_GET(r1);
+
+#if HAVE_ANALOG_AXIS(left_trigger)
+            report_->zl = (*analog_axes[ANALOG_AXIS_LT] >> 8) > 64;
+#else
             report_->zl = BUTTON_GET(l2);
+#endif
+#if HAVE_ANALOG_AXIS(right_trigger)
+            report_->zr = (*analog_axes[ANALOG_AXIS_RT] >> 8) > 64;
+#else
             report_->zr = BUTTON_GET(r2);
+#endif
             report_->ls = BUTTON_GET(l3);
             report_->rs = BUTTON_GET(r3);
+
+#if HAVE_ANALOG_AXIS(left_stick_x)
+            report_->lx = *analog_axes[ANALOG_AXIS_LX] >> 8;
+#endif
+#if HAVE_ANALOG_AXIS(left_stick_y)
+            report_->ly = *analog_axes[ANALOG_AXIS_LY] >> 8;
+#endif
+#if HAVE_ANALOG_AXIS(right_stick_x)
+            report_->rx = *analog_axes[ANALOG_AXIS_RX] >> 8;
+#endif
+#if HAVE_ANALOG_AXIS(right_stick_y)
+            report_->ry = *analog_axes[ANALOG_AXIS_RY] >> 8;
+#endif
 
             int dpad = BUTTON_GET(dpad_left) | (BUTTON_GET(dpad_right) << 1) | (BUTTON_GET(dpad_up) << 2) | (BUTTON_GET(dpad_down) << 3);
 
@@ -1931,8 +1990,32 @@ static void fill_out_report(uint8_t* report, bool wired) {
                 report_->rb = BUTTON_GET(r1);
                 report_->lsb = BUTTON_GET(l3);
                 report_->rsb = BUTTON_GET(r3);
+
+                // sticks are signed, centered on 0 (-32768..32767)
+#if HAVE_ANALOG_AXIS(left_stick_x)
+                report_->lx = (int16_t) (*analog_axes[ANALOG_AXIS_LX] - 32768);
+#endif
+#if HAVE_ANALOG_AXIS(left_stick_y)
+                report_->ly = (int16_t) (*analog_axes[ANALOG_AXIS_LY] - 32768);
+#endif
+#if HAVE_ANALOG_AXIS(right_stick_x)
+                report_->rx = (int16_t) (*analog_axes[ANALOG_AXIS_RX] - 32768);
+#endif
+#if HAVE_ANALOG_AXIS(right_stick_y)
+                report_->ry = (int16_t) (*analog_axes[ANALOG_AXIS_RY] - 32768);
+#endif
+
+                // triggers are 0..255.
+#if HAVE_ANALOG_AXIS(left_trigger)
+                report_->lt = *analog_axes[ANALOG_AXIS_LT] >> 8;
+#else
                 report_->lt = BUTTON_GET(l2) * 255;
+#endif
+#if HAVE_ANALOG_AXIS(right_trigger)
+                report_->rt = *analog_axes[ANALOG_AXIS_RT] >> 8;
+#else
                 report_->rt = BUTTON_GET(r2) * 255;
+#endif
 #endif
             } else {
 #ifdef CONFIG_BT
@@ -1949,8 +2032,32 @@ static void fill_out_report(uint8_t* report, bool wired) {
                 report_->menu = BUTTON_GET(start);
                 report_->guide = BUTTON_GET(home);
                 report_->capture = BUTTON_GET(button14);
+
+                // sticks are 0..65535
+#if HAVE_ANALOG_AXIS(left_stick_x)
+                report_->lx = *analog_axes[ANALOG_AXIS_LX];
+#endif
+#if HAVE_ANALOG_AXIS(left_stick_y)
+                report_->ly = *analog_axes[ANALOG_AXIS_LY];
+#endif
+#if HAVE_ANALOG_AXIS(right_stick_x)
+                report_->rx = *analog_axes[ANALOG_AXIS_RX];
+#endif
+#if HAVE_ANALOG_AXIS(right_stick_y)
+                report_->ry = *analog_axes[ANALOG_AXIS_RY];
+#endif
+
+                // triggers are 0..1023
+#if HAVE_ANALOG_AXIS(left_trigger)
+                report_->lt = *analog_axes[ANALOG_AXIS_LT] >> 6;
+#else
                 report_->lt = BUTTON_GET(l2) * 1023;
+#endif
+#if HAVE_ANALOG_AXIS(right_trigger)
+                report_->rt = *analog_axes[ANALOG_AXIS_RT] >> 6;
+#else
                 report_->rt = BUTTON_GET(r2) * 1023;
+#endif
 
                 int dpad = BUTTON_GET(dpad_left) | (BUTTON_GET(dpad_right) << 1) | (BUTTON_GET(dpad_up) << 2) | (BUTTON_GET(dpad_down) << 3);
 
@@ -2062,6 +2169,9 @@ int main() {
 #endif
 
     CHK(settings_subsys_init());
+#ifdef CONFIG_ADC
+    initialize_adc();
+#endif
     configure_buttons();
     determine_input_mode();
     report_init();
@@ -2113,6 +2223,9 @@ int main() {
         }
 #endif
         handle_buttons();
+#ifdef CONFIG_ADC
+        read_adc();
+#endif
 
         if (usb_ready) {
 #ifdef CONFIG_USBD_HID_SUPPORT

@@ -1,0 +1,46 @@
+/ {
+    gamepad-buttons {
+        compatible = "gpio-keys";
+        /* Feather pin numbers start at A0 and go counter-clockwise around the board. */
+        /* A0-A3 are used for the analog sticks - see gamepad-axes below. */
+        south { gpios = <&feather_header 4 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+        east { gpios = <&feather_header 5 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+        west { gpios = <&feather_header 6 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+        north { gpios = <&feather_header 7 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+        l1 { gpios = <&feather_header 8 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+        /* skip RX, TX and the next pin */
+        r1 { gpios = <&feather_header 12 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+        l2 { gpios = <&feather_header 13 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+        r2 { gpios = <&feather_header 14 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+        l3 { gpios = <&feather_header 15 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+        r3 { gpios = <&feather_header 16 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+        select { gpios = <&feather_header 17 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+        start { gpios = <&feather_header 18 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+        home { gpios = <&feather_header 19 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+        button14 { gpios = <&feather_header 20 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+    };
+
+    gamepad-axes {
+        compatible = "gamepad-axes";
+        io-channels = <&feather_adc 0>, <&feather_adc 1>, <&feather_adc 2>, <&feather_adc 3>;
+        io-channel-names = "left-stick-x", "left-stick-y", "right-stick-x", "right-stick-y";
+
+        // full range is 0-65535
+        left-stick-x-center = <32768>;
+        left-stick-y-center = <32768>;
+        left-stick-inner-radius = <2048>;
+        left-stick-outer-radius = <30720>;
+        right-stick-x-center = <32768>;
+        right-stick-y-center = <32768>;
+        right-stick-inner-radius = <2048>;
+        right-stick-outer-radius = <30720>;
+        left-trigger-lower-end = <4096>;
+        left-trigger-upper-end = <61440>;
+        right-trigger-lower-end = <4096>;
+        right-trigger-upper-end = <61440>;
+    };
+
+    aliases {
+        sys-button = "/gamepad-buttons/start";
+    };
+};

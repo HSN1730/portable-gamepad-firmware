@@ -17,6 +17,24 @@
         }
     },
     {
+        "name": "feather_nrf52840-analog",
+        "sdk": "ncs",
+        "board": "adafruit_feather_nrf52840/nrf52840/uf2",
+        "artifact_built_name": "app/zephyr/zephyr.uf2",
+        "extra_params": {
+            "EXTRA_CONF_FILE": [
+                "boards/bt.conf",
+                "boards/bt_ncs.conf",
+                "boards/usb.conf",
+                "boards/analog.conf"
+            ],
+            "EXTRA_DTC_OVERLAY_FILE": [
+                "boards/hid_dev.overlay",
+                "boards/feather_mapping_analog.overlay"
+            ]
+        }
+    },
+    {
         "name": "slimbox_bt",
         "sdk": "ncs",
         "board": "adafruit_feather_nrf52840/nrf52840/uf2",
@@ -123,6 +141,24 @@
         }
     },
     {
+        "name": "xiao_nrf52840-analog",
+        "sdk": "ncs",
+        "board": "xiao_ble",
+        "artifact_built_name": "app/zephyr/zephyr.uf2",
+        "extra_params": {
+            "EXTRA_CONF_FILE": [
+                "boards/bt.conf",
+                "boards/bt_ncs.conf",
+                "boards/usb.conf",
+                "boards/analog.conf"
+            ],
+            "EXTRA_DTC_OVERLAY_FILE": [
+                "boards/hid_dev.overlay",
+                "boards/xiao_plus_mapping_analog.overlay"
+            ]
+        }
+    },
+    {
         "name": "xiao_nrf54l15",
         "sdk": "ncs",
         "board": "xiao_nrf54l15/nrf54l15/cpuapp",
@@ -134,6 +170,22 @@
             ],
             "EXTRA_DTC_OVERLAY_FILE": [
                 "boards/xiao_mapping.overlay"
+            ]
+        }
+    },
+    {
+        "name": "xiao_nrf54l15-analog",
+        "sdk": "ncs",
+        "board": "xiao_nrf54l15/nrf54l15/cpuapp",
+        "artifact_built_name": "merged_xiao_nrf54l15_nrf54l15_cpuapp.hex",
+        "extra_params": {
+            "EXTRA_CONF_FILE": [
+                "boards/bt.conf",
+                "boards/bt_ncs.conf",
+                "boards/analog.conf"
+            ],
+            "EXTRA_DTC_OVERLAY_FILE": [
+                "boards/xiao_mapping_analog.overlay"
             ]
         }
     },
@@ -324,6 +376,22 @@
         }
     },
     {
+        "name": "feather_rp2040-analog",
+        "sdk": "zephyr",
+        "board": "adafruit_feather_rp2040",
+        "artifact_built_name": "zephyr/zephyr.uf2",
+        "extra_params": {
+            "EXTRA_CONF_FILE": [
+                "boards/usb.conf",
+                "boards/analog.conf"
+            ],
+            "EXTRA_DTC_OVERLAY_FILE": [
+                "boards/hid_dev.overlay",
+                "boards/feather_mapping_analog.overlay"
+            ]
+        }
+    },
+    {
         "name": "xiao_rp2040",
         "sdk": "zephyr",
         "board": "xiao_rp2040",
@@ -335,6 +403,22 @@
             "EXTRA_DTC_OVERLAY_FILE": [
                 "boards/hid_dev.overlay",
                 "boards/xiao_mapping.overlay"
+            ]
+        }
+    },
+    {
+        "name": "xiao_rp2040-analog",
+        "sdk": "zephyr",
+        "board": "xiao_rp2040",
+        "artifact_built_name": "zephyr/zephyr.uf2",
+        "extra_params": {
+            "EXTRA_CONF_FILE": [
+                "boards/usb.conf",
+                "boards/analog.conf"
+            ],
+            "EXTRA_DTC_OVERLAY_FILE": [
+                "boards/hid_dev.overlay",
+                "boards/xiao_mapping_analog.overlay"
             ]
         }
     },
@@ -466,6 +550,22 @@
         }
     },
     {
+        "name": "xiao_samd21-analog",
+        "sdk": "zephyr",
+        "board": "seeeduino_xiao",
+        "artifact_built_name": "zephyr/zephyr.uf2",
+        "extra_params": {
+            "EXTRA_CONF_FILE": [
+                "boards/usb.conf",
+                "boards/analog.conf"
+            ],
+            "EXTRA_DTC_OVERLAY_FILE": [
+                "boards/hid_dev.overlay",
+                "boards/xiao_mapping_analog.overlay"
+            ]
+        }
+    },
+    {
         "name": "flatbox_rev9",
         "sdk": "zephyr",
         "board": "flatbox_rev9",
@@ -495,6 +595,26 @@
             "EXTRA_DTC_OVERLAY_FILE": [
                 "boards/hid_dev.overlay",
                 "boards/xiao_plus_mapping.overlay"
+            ]
+        }
+    },
+    {
+        "name": "xiao_esp32s3-analog",
+        "sdk": "zephyr-prerelease",
+        "extra_setup": [
+            "west blobs fetch hal_espressif"
+        ],
+        "board": "xiao_esp32s3/esp32s3/procpu",
+        "artifact_built_name": "zephyr/zephyr.bin",
+        "extra_params": {
+            "EXTRA_CONF_FILE": [
+                "boards/usb.conf",
+                "boards/bt.conf",
+                "boards/analog.conf"
+            ],
+            "EXTRA_DTC_OVERLAY_FILE": [
+                "boards/hid_dev.overlay",
+                "boards/xiao_plus_mapping_analog.overlay"
             ]
         }
     },
@@ -599,6 +719,22 @@
         }
     },
     {
+        "name": "xiao_nrf54lm20a-analog",
+        "sdk": "ncs",
+        "board": "xiao_nrf54lm20a/nrf54lm20a/cpuapp",
+        "artifact_built_name": "merged_xiao_nrf54lm20a_nrf54lm20a_cpuapp.hex",
+        "extra_params": {
+            "EXTRA_CONF_FILE": [
+                "boards/bt.conf",
+                "boards/bt_ncs.conf",
+                "boards/analog.conf"
+            ],
+            "EXTRA_DTC_OVERLAY_FILE": [
+                "boards/xiao_plus_mapping_analog.overlay"
+            ]
+        }
+    },
+    {
         "name": "flatbox_rev7.2-nrf52840",
         "sdk": "ncs",
         "board": "xiao_ble",
@@ -666,6 +802,24 @@
             ],
             "EXTRA_DTC_OVERLAY_FILE": [
                 "boards/xiao_mapping.overlay"
+            ]
+        }
+    },
+    {
+        "name": "xiao_mg24-analog",
+        "sdk": "zephyr",
+        "extra_setup": [
+            "west blobs fetch hal_silabs"
+        ],
+        "board": "xiao_mg24",
+        "artifact_built_name": "zephyr/zephyr.hex",
+        "extra_params": {
+            "EXTRA_CONF_FILE": [
+                "boards/bt.conf",
+                "boards/analog.conf"
+            ],
+            "EXTRA_DTC_OVERLAY_FILE": [
+                "boards/xiao_mapping_analog.overlay"
             ]
         }
     },

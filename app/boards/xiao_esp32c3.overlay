@@ -5,37 +5,31 @@
     };
 };
 
-/ {
-    aliases {
-        status-led = &yellow_led;
-    };
-};
-
-// D0-D2 are GPIO0-2, ADC1 channels 0-2.
-// D3 (GPIO21) isn't ADC-capable on this chip.
+// D0-D2 are GPIO2-4, ADC1 channels 2-4.
+// D3 (GPIO5) isn't ADC-capable on this chip.
 &adc0 {
     status = "okay";
     #address-cells = <1>;
     #size-cells = <0>;
 
-    channel@0 {
-        reg = <0>; /* D0, GPIO0 */
-        zephyr,gain = "ADC_GAIN_1_4";
-        zephyr,reference = "ADC_REF_INTERNAL";
-        zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
-        zephyr,resolution = <12>;
-    };
-
-    channel@1 {
-        reg = <1>; /* D1, GPIO1 */
-        zephyr,gain = "ADC_GAIN_1_4";
-        zephyr,reference = "ADC_REF_INTERNAL";
-        zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
-        zephyr,resolution = <12>;
-    };
-
     channel@2 {
-        reg = <2>; /* D2, GPIO2 */
+        reg = <2>; /* D0, GPIO2 */
+        zephyr,gain = "ADC_GAIN_1_4";
+        zephyr,reference = "ADC_REF_INTERNAL";
+        zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+        zephyr,resolution = <12>;
+    };
+
+    channel@3 {
+        reg = <3>; /* D1, GPIO3 */
+        zephyr,gain = "ADC_GAIN_1_4";
+        zephyr,reference = "ADC_REF_INTERNAL";
+        zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+        zephyr,resolution = <12>;
+    };
+
+    channel@4 {
+        reg = <4>; /* D2, GPIO4 */
         zephyr,gain = "ADC_GAIN_1_4";
         zephyr,reference = "ADC_REF_INTERNAL";
         zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;

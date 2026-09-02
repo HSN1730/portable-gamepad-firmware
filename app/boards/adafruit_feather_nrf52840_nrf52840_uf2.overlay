@@ -61,4 +61,77 @@
         zephyr,resolution = <12>;
         zephyr,oversampling = <4>;
     };
+
+    channel@0 {
+        reg = <0>; /* A0, P0.04 (AIN2) */
+        zephyr,input-positive = <NRF_SAADC_AIN2>;
+        zephyr,gain = "ADC_GAIN_1_6";
+        zephyr,reference = "ADC_REF_INTERNAL";
+        zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+        zephyr,resolution = <12>;
+        zephyr,oversampling = <4>;
+    };
+
+    channel@1 {
+        reg = <1>; /* A1, P0.05 (AIN3) */
+        zephyr,input-positive = <NRF_SAADC_AIN3>;
+        zephyr,gain = "ADC_GAIN_1_6";
+        zephyr,reference = "ADC_REF_INTERNAL";
+        zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+        zephyr,resolution = <12>;
+        zephyr,oversampling = <4>;
+    };
+
+    channel@2 {
+        reg = <2>; /* A2, P0.30 (AIN6) */
+        zephyr,input-positive = <NRF_SAADC_AIN6>;
+        zephyr,gain = "ADC_GAIN_1_6";
+        zephyr,reference = "ADC_REF_INTERNAL";
+        zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+        zephyr,resolution = <12>;
+        zephyr,oversampling = <4>;
+    };
+
+    channel@3 {
+        reg = <3>; /* A3, P0.28 (AIN4) */
+        zephyr,input-positive = <NRF_SAADC_AIN4>;
+        zephyr,gain = "ADC_GAIN_1_6";
+        zephyr,reference = "ADC_REF_INTERNAL";
+        zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+        zephyr,resolution = <12>;
+        zephyr,oversampling = <4>;
+    };
+
+    channel@4 {
+        reg = <4>; /* A4, P0.02 (AIN0) */
+        zephyr,input-positive = <NRF_SAADC_AIN0>;
+        zephyr,gain = "ADC_GAIN_1_6";
+        zephyr,reference = "ADC_REF_INTERNAL";
+        zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+        zephyr,resolution = <12>;
+        zephyr,oversampling = <4>;
+    };
+
+    channel@6 {
+        reg = <6>; /* A5, P0.03 (AIN1) */
+        zephyr,input-positive = <NRF_SAADC_AIN1>;
+        zephyr,gain = "ADC_GAIN_1_6";
+        zephyr,reference = "ADC_REF_INTERNAL";
+        zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+        zephyr,resolution = <12>;
+        zephyr,oversampling = <4>;
+    };
+};
+
+/ {
+    feather_adc: io-channel-nexus {
+        compatible = "io-channel-nexus";
+        #io-channel-cells = <1>;
+        io-channel-map = <0 &adc 0>,  /* A0 */
+                          <1 &adc 1>,  /* A1 */
+                          <2 &adc 2>,  /* A2 */
+                          <3 &adc 3>,  /* A3 */
+                          <4 &adc 4>,  /* A4 */
+                          <5 &adc 6>;  /* A5, sic */
+    };
 };

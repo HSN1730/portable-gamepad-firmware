@@ -1,0 +1,74 @@
+description: Gamepad analog axes mapping
+compatible: "gamepad-axes"
+include: base.yaml
+
+properties:
+  io-channels:
+    type: phandle-array
+
+  analog-axis-voltage-mv:
+    type: int
+    description: |
+      Voltage (in mV) actually driving the axes' sensors (e.g. a
+      joystick potentiometer's +V pin). Distinct from each channel@N
+      node's zephyr,reference, which only says what the ADC compares
+      its input against, not what's really powering the sensor.
+      Defaults to 3300 in code if not set.
+
+  # Stick calibration: all four properties are in the same 0-65535 range
+  # the axes are normalized to. Setting any one of them enables
+  # calibration for that stick - the rest then default to "no
+  # calibration" values: *-center defaults to dead center (32768),
+  # *-inner-radius defaults to 0 (no deadzone), *-outer-radius defaults
+  # to full reach to the edge of the output range.
+  left-stick-x-center:
+    type: int
+    description: Raw reading when the left stick's X axis is centered.
+  left-stick-y-center:
+    type: int
+    description: Raw reading when the left stick's Y axis is centered.
+  left-stick-inner-radius:
+    type: int
+    description: |
+      Radial deadzone: distance from center (in the same units as
+      left-stick-*-center) below which the stick reads as centered.
+  left-stick-outer-radius:
+    type: int
+    description: |
+      Distance from center at and beyond which the stick reads as fully
+      deflected.
+
+  right-stick-x-center:
+    type: int
+    description: Raw reading when the right stick's X axis is centered.
+  right-stick-y-center:
+    type: int
+    description: Raw reading when the right stick's Y axis is centered.
+  right-stick-inner-radius:
+    type: int
+    description: |
+      Radial deadzone: distance from center (in the same units as
+      right-stick-*-center) below which the stick reads as centered.
+  right-stick-outer-radius:
+    type: int
+    description: |
+      Distance from center at and beyond which the stick reads as fully
+      deflected.
+
+  # Trigger calibration: linear remap of [lower-end, upper-end] to the
+  # trigger's full 0-65535 output range. Setting either property enables
+  # calibration for that trigger - lower-end defaults to 0 and upper-end
+  # defaults to full scale (65535) if not set.
+  left-trigger-lower-end:
+    type: int
+    description: Raw reading at and below which left trigger sends 0%
+  left-trigger-upper-end:
+    type: int
+    description: Raw reading at and above which the left trigger sends 100%
+
+  right-trigger-lower-end:
+    type: int
+    description: Raw reading at and below which right trigger sends 0%
+  right-trigger-upper-end:
+    type: int
+    description: Raw reading at and above which the right trigger sends 100%

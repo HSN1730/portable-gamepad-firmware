@@ -1,0 +1,47 @@
+// This overlay is for when a Xiao Plus board is used standalone, not as part of Flatbox rev7.2.
+
+/ {
+    gamepad-buttons {
+        compatible = "gpio-keys";
+        start { gpios = <&xiao_plus_d 4 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+        select { gpios = <&xiao_plus_d 5 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+        home { gpios = <&xiao_plus_d 6 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+        south { gpios = <&xiao_plus_d 7 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+        east { gpios = <&xiao_plus_d 8 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+        west { gpios = <&xiao_plus_d 9 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+        north { gpios = <&xiao_plus_d 10 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+        r1 { gpios = <&xiao_plus_d 11 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+        l1 { gpios = <&xiao_plus_d 12 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+        r2 { gpios = <&xiao_plus_d 13 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+        l2 { gpios = <&xiao_plus_d 14 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+        dpad-left { gpios = <&xiao_plus_d 15 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+        // skip 16
+        dpad-right { gpios = <&xiao_plus_d 17 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+        dpad-up { gpios = <&xiao_plus_d 18 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+        dpad-down { gpios = <&xiao_plus_d 19 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; };
+    };
+
+    gamepad-axes {
+        compatible = "gamepad-axes";
+        io-channels = <&xiao_adc 0>, <&xiao_adc 1>, <&xiao_adc 2>, <&xiao_adc 3>;
+        io-channel-names = "left-stick-x", "left-stick-y", "right-stick-x", "right-stick-y";
+
+        // full range is 0-65535
+        left-stick-x-center = <32768>;
+        left-stick-y-center = <32768>;
+        left-stick-inner-radius = <2048>;
+        left-stick-outer-radius = <30720>;
+        right-stick-x-center = <32768>;
+        right-stick-y-center = <32768>;
+        right-stick-inner-radius = <2048>;
+        right-stick-outer-radius = <30720>;
+        left-trigger-lower-end = <4096>;
+        left-trigger-upper-end = <61440>;
+        right-trigger-lower-end = <4096>;
+        right-trigger-upper-end = <61440>;
+    };
+
+    aliases {
+        sys-button = "/gamepad-buttons/start";
+    };
+};

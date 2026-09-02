@@ -16,6 +16,10 @@ else()
     target_sources(app PRIVATE src/battery_null.c)
 endif()
 
+if (CONFIG_ADC)
+    target_sources(app PRIVATE src/analog_axes.c)
+endif()
+
 if ("${CONFIG_BUILD_OUTPUT_UF2_FAMILY_ID}" STREQUAL "0xada52840")
     target_sources(app PRIVATE src/bootloader_nrf52840.c)
 endif()

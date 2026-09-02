@@ -23,6 +23,20 @@ config PGF_PRODUCT_NAME
     string "Device product name"
     default "PGF"
 
+config PGF_GROUP_ADC_CHANNELS
+    bool "Read all analog axes on the same ADC controller in one call"
+    depends on ADC
+    default n if ADC_SAM0
+    default n if ADC_ESP32
+    default y
+    help
+        Most ADC drivers can read several channels in one adc_read()
+        call, whether through real hardware scan/sequencer support or a
+        software loop the driver manages transparently. Some can't.
+        Turn this off to make every analog axis use its own adc_read()
+        call instead of grouping every axis on a shared controller into
+        a single one.
+
 choice PGF_BATTERY_LEVEL_REPORTING
     prompt "Battery level reporting"
     optional
