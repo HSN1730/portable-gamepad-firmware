@@ -42,6 +42,7 @@
 #include "hids.h"
 #endif
 
+#include "battery.h"
 #include "bootloader.h"
 #include "chk.h"
 #include "sleep.h"
@@ -2085,6 +2086,7 @@ int main() {
 #endif
 
     configure_leds();
+    battery_init();
 
 #ifdef CONFIG_BT
     if (!CHK(bt_enable(NULL))) {

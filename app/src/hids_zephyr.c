@@ -53,7 +53,14 @@ static uint16_t report_map_len;
 static uint16_t input_report_size;
 
 static uint8_t protocol_mode = 0x01;  // report protocol, we don't support boot protocol
+
+enum {
+    HIDS_CTRL_POINT_SUSPEND = 0x00,
+    HIDS_CTRL_POINT_EXIT_SUSPEND = 0x01,
+};
+
 static uint8_t ctrl_point;
+static bool suspended = false;
 
 static ssize_t read_info(struct bt_conn* conn, const struct bt_gatt_attr* attr, void* buf, uint16_t len, uint16_t offset) {
     return bt_gatt_attr_read(conn, attr, buf, len, offset, &hids_info, sizeof(hids_info));
@@ -95,6 +102,12 @@ static ssize_t write_ctrl_point(struct bt_conn* conn, const struct bt_gatt_attr*
     }
 
     memcpy((uint8_t*) &ctrl_point + offset, buf, len);
+
+    if (ctrl_point == HIDS_CTRL_POINT_SUSPEND) {
+        suspended = true;
+    } else if (ctrl_point == HIDS_CTRL_POINT_EXIT_SUSPEND) {
+        suspended = false;
+    }
 
     return len;
 }
@@ -140,7 +153,12 @@ int hids_connected(struct bt_conn* conn) {
 }
 
 int hids_disconnected(struct bt_conn* conn) {
+    suspended = false;
     return 0;
+}
+
+bool hids_is_suspended(void) {
+    return suspended;
 }
 
 static void report_sent_cb(struct bt_conn* conn, void* user_data) {

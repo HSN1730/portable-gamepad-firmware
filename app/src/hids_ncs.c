@@ -18,6 +18,25 @@ LOG_MODULE_DECLARE(pgf);
 
 BT_HIDS_DEF(hids_obj, PGF_MAX_BT_REPORT_SIZE);
 
+static bool suspended = false;
+
+static void conn_cp_evt_handler(enum bt_hids_cp_evt evt, struct bt_conn* conn) {
+    switch (evt) {
+        case BT_HIDS_CP_EVT_HOST_SUSP:
+            suspended = true;
+            break;
+        case BT_HIDS_CP_EVT_HOST_EXIT_SUSP:
+            suspended = false;
+            break;
+        default:
+            break;
+    }
+}
+
+bool hids_is_suspended(void) {
+    return suspended;
+}
+
 void hids_init(const uint8_t* report_map, size_t report_map_len, uint8_t report_id, size_t report_size) {
     struct bt_hids_init_param hids_init_param = { 0 };
     struct bt_hids_inp_rep* hids_inp_rep;
@@ -35,6 +54,8 @@ void hids_init(const uint8_t* report_map, size_t report_map_len, uint8_t report_
     hids_inp_rep->id = report_id;
     hids_init_param.inp_rep_group_init.cnt++;
 
+    hids_init_param.conn_cp_evt_handler = conn_cp_evt_handler;
+
     CHK(bt_hids_init(&hids_obj, &hids_init_param));
 }
 
@@ -43,6 +64,7 @@ int hids_connected(struct bt_conn* conn) {
 }
 
 int hids_disconnected(struct bt_conn* conn) {
+    suspended = false;
     return bt_hids_disconnected(&hids_obj, conn);
 }
 

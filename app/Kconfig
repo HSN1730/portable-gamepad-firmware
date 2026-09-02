@@ -23,4 +23,31 @@ config PGF_PRODUCT_NAME
     string "Device product name"
     default "PGF"
 
+choice PGF_BATTERY_LEVEL_REPORTING
+    prompt "Battery level reporting"
+    optional
+
+config PGF_BATTERY_LEVEL_REPORTING_VBATT
+    bool "Voltage divider + ADC"
+    depends on ADC
+    help
+        Periodically samples battery voltage through a /vbatt
+        voltage-divider devicetree node and reports it over the
+        Bluetooth Battery Service (if enabled) and the log. The board
+        must define a /vbatt node with status "okay" - the build will
+        fail otherwise.
+
+config PGF_BATTERY_LEVEL_REPORTING_PMIC
+    bool "Nordic nPM13xx PMIC over I2C"
+    depends on I2C
+    depends on SENSOR
+    help
+        Periodically reads battery voltage from a Nordic nPM13xx PMIC
+        over I2C and reports it over the Bluetooth Battery Service (if
+        enabled) and the log. The board must define a
+        "nordic,npm1300-charger" devicetree node labeled pmic_charger
+        with status "okay" - the build will fail otherwise.
+
+endchoice
+
 endmenu

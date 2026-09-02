@@ -1,6 +1,7 @@
 #ifndef _HIDS_H_
 #define _HIDS_H_
 
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <zephyr/bluetooth/conn.h>
@@ -13,5 +14,8 @@ void hids_init(const uint8_t* report_map, size_t report_map_len, uint8_t report_
 int hids_connected(struct bt_conn* conn);
 int hids_disconnected(struct bt_conn* conn);
 int hids_send_report(struct bt_conn* conn, const uint8_t* data, size_t len);
+
+// True if the host has told us (via the HID Control Point) that it's suspended.
+bool hids_is_suspended(void);
 
 #endif

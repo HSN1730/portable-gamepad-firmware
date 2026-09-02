@@ -4,8 +4,17 @@ find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
 project(pgf)
 
 target_sources(app PRIVATE
+    src/battery.c
     src/main.c
 )
+
+if (CONFIG_PGF_BATTERY_LEVEL_REPORTING_VBATT)
+    target_sources(app PRIVATE src/battery_vbatt.c)
+elseif (CONFIG_PGF_BATTERY_LEVEL_REPORTING_PMIC)
+    target_sources(app PRIVATE src/battery_pmic.c)
+else()
+    target_sources(app PRIVATE src/battery_null.c)
+endif()
 
 if ("${CONFIG_BUILD_OUTPUT_UF2_FAMILY_ID}" STREQUAL "0xada52840")
     target_sources(app PRIVATE src/bootloader_nrf52840.c)
