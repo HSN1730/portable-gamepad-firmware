@@ -2083,8 +2083,10 @@ int main() {
 #endif
 
     while (keep_going) {
+#ifdef CONFIG_LOG
         // this makes logging work, but potentially stops us from achieving max polling rate
-        // k_sleep(K_USEC(1));
+        k_sleep(K_USEC(1));
+#endif
 #ifdef CONFIG_BT
         if (!usb_ready) {
             k_sem_take(&bt_event_sem, K_USEC(10000));
