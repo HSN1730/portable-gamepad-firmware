@@ -4,7 +4,11 @@ _If you're looking for the Slimbox BT firmware, this is it. It has been merged w
 
 This repository contains code for wired/wireless game controller firmware that runs on many different microcontrollers.
 
-It uses Zephyr and should in theory run on any platform it supports. It has been tested on: RP2040, RP2350, nRF52840, nRF52832, nRF54L15, nRF54LM20, SAMD21, STM32G0B1, ESP32-S3, MIMXRT1062. The wireless function currently only works on Nordic's nRF52 and nRF54L chips. For a full list of pre-built binaries, see the [latest release](https://github.com/jfedor2/portable-gamepad-firmware/releases/latest/).
+* USB/Bluetooth LE
+* compatible with Windows, Mac, Linux, Switch, Switch 2, Android, iOS
+* tested on RP2040, RP2350, nRF52840, nRF52832, nRF54L15, nRF54LM20, SAMD21, STM32G0B1, ESP32-S3, ESP32-C3, ESP32-C6, MIMXRT1062, MG24
+
+For a full list of pre-built binaries, see the [latest release](https://github.com/jfedor2/portable-gamepad-firmware/releases/latest/).
 
 ## How to use
 
@@ -109,6 +113,33 @@ D13 | button 14
 </details>
 
 <details>
+<summary>Adafruit Feather - analog variant</summary>
+
+If you're using an analog-enabled build on an Adafruit Feather board, wire the buttons and joysticks to pins on the board as follows:
+
+pin | button
+--- | ------
+A0 | Left stick X
+A1 | Left stick Y
+A2 | Right stick X
+A3 | Right stick Y
+A4 | south
+A5 | east
+SCK | west
+MO | north
+MI | L1
+SDA | R1
+SCL | L2
+D5 | R2
+D6 | L3
+D9 | R3
+D10 | select
+D11 | start
+D12 | home
+D13 | button 14
+</details>
+
+<details>
 <summary>Seeed Xiao</summary>
 
 If you're using one of the standalone Xiao builds (not as part of Flatbox rev7), wire the buttons to pins on the board as follows:
@@ -126,6 +157,51 @@ D7 | D-pad left
 D8 | D-pad right
 D9 | D-pad up
 D10 | D-pad down
+
+Additionally, on Xiao Plus boards, the extra pins are mapped as follows. (D0.5 is the pin between D0 and D1, D1.5 is the pin between D1 and D2 and so on.)
+
+pin | button
+--- | ------
+D0.5 | R1
+D1.5 | L1
+D2.5 | R2
+D3.5 | L2
+D4.5 | button 14
+D7.5 | R3
+D8.5 | L3
+</details>
+
+<details>
+<summary>Seeed Xiao - analog variant</summary>
+
+If you're using an analog-enabled build on a Xiao board, wire the buttons and joysticks to pins on the board as follows:
+
+pin | button
+--- | ------
+D0 | Left stick X
+D1 | Left stick Y
+D2 | Right stick X
+D3 | Right stick Y
+D4 | start
+D5 | select
+D6 | home
+D7 | south
+D8 | east
+D9 | west
+D10 | north
+
+Additionally, on Xiao Plus boards, the extra pins are mapped as follows. (D0.5 is the pin between D0 and D1, D1.5 is the pin between D1 and D2 and so on.)
+
+pin | button
+--- | ------
+D0.5 | R1
+D1.5 | L1
+D2.5 | R2
+D3.5 | L2
+D4.5 | D-pad left
+D7.5 | D-pad right
+D8.5 | D-pad up
+D9.5 | D-pad down
 </details>
 
 <details>
@@ -176,11 +252,6 @@ Once you have a board definition, the only other thing you need is a devicetree 
 You might also want to define a `status-led` alias.
 
 For the input mode to be persisted, you will need a storage partition in your board definition. If you just want to test if everything else is working, you can set `CONFIG_NVS=n`. Setting the input mode will still work, but it won't be remembered.
-
-## TODO
-
-* analog inputs for sticks and triggers
-* battery level reporting
 
 ## License
 
