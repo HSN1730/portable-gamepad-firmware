@@ -14,11 +14,6 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
-      - name: Free up some disk space
-        run: |
-          df -h
-          sudo rm -rf "$AGENT_TOOLSDIRECTORY" /usr/local/lib/android /usr/share/dotnet || true
-          df -h
       - uses: actions/checkout@v6
       - name: Build
         run: |
