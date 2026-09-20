@@ -1,5 +1,49 @@
+/*
+ * App-level board overlay for the nice!nano (and its clones, e.g. the
+ * SuperMini / "ProMicro NRF52840").
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+#include <zephyr/dt-bindings/adc/adc.h>
+#include <zephyr/dt-bindings/adc/nrf-saadc.h>
+
 / {
     aliases {
         status-led = &blue_led;
+    };
+
+    /*
+     * Battery voltage.
+     *
+     * The nRF52840 has an internal SAADC input called VDDHDIV5 which measures
+     * the VDDH supply divided by 5. On the nice!nano the single-cell LiPo is
+     * wired to VDDH (high voltage mode), so VDDH equals the battery voltage and
+     * we scale it back up by 5.
+     *
+     * No external resistor divider is involved, so nothing needs calibrating:
+     * output-ohms / full-ohms below only express the fixed 1:5 ratio of that
+     * internal divider.
+     */
+    vbatt: vbatt {
+        compatible = "voltage-divider";
+        io-channels = <&adc 0>;
+        output-ohms = <100000>;
+        full-ohms = <500000>;
+    };
+};
+
+&adc {
+    #address-cells = <1>;
+    #size-cells = <0>;
+
+    channel@0 {
+        reg = <0>;
+        zephyr,gain = "ADC_GAIN_1_2";
+        zephyr,reference = "ADC_REF_INTERNAL";
+        zephyr,acquisition-time = <ADC_ACQ_TIME(ADC_ACQ_TIME_MICROSECONDS, 40)>;
+        zephyr,input-positive = <NRF_SAADC_VDDHDIV5>;
+        zephyr,resolution = <12>;
+        zephyr,oversampling = <4>;
     };
 };
