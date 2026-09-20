@@ -23,6 +23,12 @@ LOG_MODULE_DECLARE(pgf);
 
 #define BATTERY_REPORT_INTERVAL K_SECONDS(60)
 
+// Level at or below which the battery counts as "low": drives the status LED
+// warning and the BAS 1.1 Battery Charge Level. Adjust to taste.
+#define BATTERY_LOW_PERCENT 20
+// Level at or below which the battery counts as "critical".
+#define BATTERY_CRITICAL_PERCENT 5
+
 struct discharge_point {
     uint16_t pptt;
     uint16_t mv;
@@ -62,6 +68,32 @@ static K_WORK_DELAYABLE_DEFINE(battery_work, battery_work_fn);
 static int last_reported_level = -1;
 #endif
 
+// VBUS is present, i.e. the on-board charger is charging the battery. Board has
+// no charger status GPIO, but USB presence is an accurate stand-in: the charger
+// starts charging as soon as VBUS appears.
+static bool usb_present = false;
+
+// Set when VBUS has been seen since the last successful sample. Sampling can be
+// skipped while charging (HIDS is suspended on USB), so this makes sure the
+// level is allowed to rise again on the first sample after unplugging.
+static bool usb_seen_since_sample = false;
+
+// Lowest level reported since the charger was last connected. Hosts expect the
+// reported level to fall monotonically unless the battery is really charging -
+// a level that climbs back up makes Windows fire repeated low battery alerts.
+static int lowest_level = -1;
+
+bool battery_is_low(void) {
+    return lowest_level >= 0 && lowest_level <= BATTERY_LOW_PERCENT;
+}
+
+void battery_set_usb_present(bool present) {
+    usb_present = present;
+    if (present) {
+        usb_seen_since_sample = true;
+    }
+}
+
 static void battery_work_fn(struct k_work* work) {
     int mv;
 
@@ -74,14 +106,44 @@ static void battery_work_fn(struct k_work* work) {
     if (!suspended && battery_hw_read_mv(&mv)) {
         unsigned int pptt = level_pptt(mv);
         int level = (int) (pptt / 100);
-        LOG_INF("battery: %d mV, %d%%", mv, level);
+
+        // The reported level may only rise again while the battery is actually
+        // being charged (or on the very first sample).
+        if (usb_present || usb_seen_since_sample || lowest_level < 0) {
+            lowest_level = level;
+            usb_seen_since_sample = false;
+        } else if (level < lowest_level) {
+            lowest_level = level;
+        }
+
+        LOG_INF("battery: %d mV, %d%% (reporting %d%%)", mv, level, lowest_level);
 
 #ifdef CONFIG_BT_BAS
-        if (last_reported_level < 0 || abs(level - last_reported_level) >= BATTERY_LEVEL_REPORT_THRESHOLD) {
-            CHK(bt_bas_set_battery_level(level));
-            last_reported_level = level;
+        if (last_reported_level < 0 ||
+            abs(lowest_level - last_reported_level) >= BATTERY_LEVEL_REPORT_THRESHOLD) {
+            CHK(bt_bas_set_battery_level(lowest_level));
+            last_reported_level = lowest_level;
         }
-#endif
+
+#ifdef CONFIG_BT_BAS_BLS
+        // BAS 1.1: the accessory decides when the host should warn, and reports
+        // whether it is charging so the host can suppress stale alerts. Hosts
+        // that do not support this fall back to the BAS 1.0 behaviour (a low
+        // battery alert at 5%).
+        if (lowest_level <= BATTERY_CRITICAL_PERCENT) {
+            bt_bas_bls_set_battery_charge_level(BT_BAS_BLS_CHARGE_LEVEL_CRITICAL);
+        } else if (lowest_level <= BATTERY_LOW_PERCENT) {
+            bt_bas_bls_set_battery_charge_level(BT_BAS_BLS_CHARGE_LEVEL_LOW);
+        } else {
+            bt_bas_bls_set_battery_charge_level(BT_BAS_BLS_CHARGE_LEVEL_GOOD);
+        }
+
+        bt_bas_bls_set_battery_charge_state(usb_present ? BT_BAS_BLS_CHARGE_STATE_CHARGING
+                                                        : BT_BAS_BLS_CHARGE_STATE_DISCHARGING_ACTIVE);
+        bt_bas_bls_set_wired_external_power_source(
+            usb_present ? BT_BAS_BLS_WIRED_POWER_CONNECTED : BT_BAS_BLS_WIRED_POWER_NOT_CONNECTED);
+#endif // CONFIG_BT_BAS_BLS
+#endif // CONFIG_BT_BAS
     }
 
     k_work_reschedule(&battery_work, BATTERY_REPORT_INTERVAL);

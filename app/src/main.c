@@ -143,10 +143,13 @@ enum LedMode {
     LED_CONNECTED = 2,
     LED_ADVERTISING = 3,
     LED_PAIRING = 4,
+    LED_LOW_BATTERY = 5,
 };
 
 static atomic_t led_mode = (atomic_t) ATOMIC_INIT(LED_OFF);
 static bool led_next_blink_state = true;
+// Number of flashes already emitted in the current low battery alert burst.
+static int low_battery_flash_count = 0;
 
 #if DT_NODE_HAS_STATUS(DT_ALIAS(status_led), okay)
 static const struct gpio_dt_spec status_led = GPIO_DT_SPEC_GET(DT_ALIAS(status_led), gpios);
@@ -175,6 +178,18 @@ static K_WORK_DELAYABLE_DEFINE(led_work, led_work_fn);
 static void led_work_fn(struct k_work* work) {
     enum LedMode my_led_mode = (enum LedMode) atomic_get(&led_mode);
     int next_work = 0;
+
+    // A low battery is more important than the "connected" heartbeat, so it
+    // replaces that pattern with a clearly different one. Other states keep
+    // their own pattern.
+    if (my_led_mode == LED_CONNECTED && battery_is_low()) {
+        my_led_mode = LED_LOW_BATTERY;
+    }
+
+    if (my_led_mode != LED_LOW_BATTERY) {
+        low_battery_flash_count = 0;
+    }
+
     switch (my_led_mode) {
         case LED_OFF:
             set_status_led(false);
@@ -196,6 +211,23 @@ static void led_work_fn(struct k_work* work) {
             set_status_led(led_next_blink_state);
             led_next_blink_state = !led_next_blink_state;
             next_work = 100;
+            break;
+        case LED_LOW_BATTERY:
+            // Three quick flashes, then a long pause, repeating.
+            set_status_led(led_next_blink_state);
+            if (led_next_blink_state) {
+                led_next_blink_state = false;
+                next_work = 100;
+            } else {
+                led_next_blink_state = true;
+                low_battery_flash_count++;
+                if (low_battery_flash_count >= 3) {
+                    low_battery_flash_count = 0;
+                    next_work = 1500;
+                } else {
+                    next_work = 150;
+                }
+            }
             break;
     }
     if (next_work > 0) {
@@ -1461,6 +1493,8 @@ UDC_STATIC_BUF_DEFINE(usb_report, MAX_REPORT_SIZE + 1);
 static void set_usb_ready(const bool ready) {
     LOG_INF("%d", ready);
     usb_ready = ready;
+    // USB present means the on-board charger is charging the battery.
+    battery_set_usb_present(usb_ready);
 #ifdef CONFIG_BT
     struct bt_conn* conn = get_active_conn();
     if (usb_ready) {
