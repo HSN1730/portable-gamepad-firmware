@@ -1493,7 +1493,8 @@ UDC_STATIC_BUF_DEFINE(usb_report, MAX_REPORT_SIZE + 1);
 static void set_usb_ready(const bool ready) {
     LOG_INF("%d", ready);
     usb_ready = ready;
-    // USB present means the on-board charger is charging the battery.
+    // Backstop for boards whose USB stack cannot detect VBUS on its own: the
+    // primary "is charging" signal is set from the VBUS messages above.
     battery_set_usb_present(usb_ready);
 #ifdef CONFIG_BT
     struct bt_conn* conn = get_active_conn();
@@ -1553,10 +1554,15 @@ static void usbd_msg_cb(struct usbd_context* const ctx, const struct usbd_msg* m
     switch (msg->type) {
         case USBD_MSG_VBUS_READY:
             LOG_INF("USBD_MSG_VBUS_READY");
+            // VBUS is present: the on-board charger is charging the battery.
+            // This fires for any 5V source (wall charger, power bank, PC), which
+            // makes it the accurate "is charging" signal for the battery code.
+            battery_set_usb_present(true);
             CHK(usbd_enable(ctx));
             break;
         case USBD_MSG_VBUS_REMOVED:
             LOG_INF("USBD_MSG_VBUS_REMOVED");
+            battery_set_usb_present(false);
             CHK(usbd_disable(ctx));
             break;
         default:

@@ -68,9 +68,10 @@ static K_WORK_DELAYABLE_DEFINE(battery_work, battery_work_fn);
 static int last_reported_level = -1;
 #endif
 
-// VBUS is present, i.e. the on-board charger is charging the battery. Board has
-// no charger status GPIO, but USB presence is an accurate stand-in: the charger
-// starts charging as soon as VBUS appears.
+// VBUS is present, i.e. the on-board charger is charging the battery. The board
+// has no charger status GPIO, but VBUS presence is an accurate stand-in: the
+// charger starts charging the moment 5V appears, whatever the source (wall
+// charger, power bank or PC). Set from the USB VBUS messages in main.c.
 static bool usb_present = false;
 
 // Set when VBUS has been seen since the last successful sample. Sampling can be
